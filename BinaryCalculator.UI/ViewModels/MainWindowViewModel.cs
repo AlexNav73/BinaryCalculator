@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace BinaryCalculator.UI.ViewModels;
 
@@ -6,4 +7,10 @@ internal partial class MainWindowViewModel : ObservableObject, IMainWindowViewMo
 {
     [ObservableProperty]
     private string _text;
+
+    [RelayCommand]
+    private void One()
+    {
+        Text = Text + "1";
+    }
 }
