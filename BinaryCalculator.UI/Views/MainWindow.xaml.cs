@@ -1,5 +1,4 @@
 using BinaryCalculator.UI.ViewModels;
-using System.Windows;
 
 namespace BinaryCalculator.UI;
 

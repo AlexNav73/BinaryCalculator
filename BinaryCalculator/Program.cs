@@ -11,6 +11,7 @@ public static class Program
         var builder = new ContainerBuilder();
 
         builder.RegisterModule<UI.Module>();
+        builder.RegisterModule<BL.Module>();
 
         using var container = builder.Build();
 

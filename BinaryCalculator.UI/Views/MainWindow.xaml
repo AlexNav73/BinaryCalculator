@@ -9,7 +9,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Views/Theme.xaml" />
+                <ResourceDictionary Source="Theme.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -74,10 +74,10 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Button Grid.Row="0" Grid.Column="0" Content="CE" Style="{StaticResource KeyboardButtonStype}" Background="#995f5d" Foreground="White" />
+                <Button Grid.Row="0" Grid.Column="0" Content="CE" Command="{Binding ClearCommand}" Style="{StaticResource KeyboardButtonStype}" Background="#995f5d" Foreground="White" />
                 <Button Grid.Row="0" Grid.Column="1" Content="1" Command="{Binding OneCommand}" Style="{StaticResource KeyboardButtonStype}" Background="#333d46" Foreground="White" />
-                <Button Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Content="+" Style="{StaticResource BigKeyboardButtonStype}" Background="#626f7f" Foreground="White" />
-                <Button Grid.Row="0" Grid.Column="3" Content="-" Style="{StaticResource KeyboardButtonStype}" Background="#626f7f" Foreground="White" />
+                <Button Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Content="+" Command="{Binding AddCommand}" Style="{StaticResource BigKeyboardButtonStype}" Background="#626f7f" Foreground="White" />
+                <Button Grid.Row="0" Grid.Column="3" Content="-" Command="{Binding SubtractCommand}" Style="{StaticResource KeyboardButtonStype}" Background="#626f7f" Foreground="White" />
                 <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource KeyboardButtonStype}" Background="#995f5d" Foreground="White">
                     <Button.Content>
                         <StackPanel>
@@ -88,8 +88,8 @@
                         </StackPanel>
                     </Button.Content>
                 </Button>
-                <Button Grid.Row="1" Grid.Column="1" Content="0" Style="{StaticResource KeyboardButtonStype}" Background="#333d46" Foreground="White" />
-                <Button Grid.Row="1" Grid.Column="3" Content="=" Style="{StaticResource KeyboardButtonStype}" Background="#626f7f" Foreground="White" />
+                <Button Grid.Row="1" Grid.Column="1" Content="0" Command="{Binding ZeroCommand}" Style="{StaticResource KeyboardButtonStype}" Background="#333d46" Foreground="White" />
+                <Button Grid.Row="1" Grid.Column="3" Content="=" Command="{Binding EqualsCommand}" Style="{StaticResource KeyboardButtonStype}" Background="#626f7f" Foreground="White" />
             </Grid>
         </Grid>
     </Border>
