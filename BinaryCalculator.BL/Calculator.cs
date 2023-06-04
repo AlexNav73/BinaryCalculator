@@ -4,11 +4,12 @@ namespace BinaryCalculator.BL;
 
 internal sealed class Calculator : ICalculator
 {
-    private const int MaxValue = 1 << 12;
-    private const int OverflowMask = ~((MaxValue << 1) - 1);
+    private const int MaxBits = 1 << 12;
+    private const int OverflowMask = ~((MaxBits << 1) - 1);
 
     private int _storedNumber;
     private int _displayNumber;
+    private int _lastEnteredNumber;
     private CalculatorState _state;
     private Operation? _lastOperation;
 
@@ -20,11 +21,13 @@ internal sealed class Calculator : ICalculator
             _state = CalculatorState.WaitingForSecondNumber;
         }
 
-        if (!IsMaxValue(_displayNumber))
+        if (!IsMaxBitsReached(_displayNumber))
         {
             _displayNumber <<= 1;
             _displayNumber |= one ? 1 : 0;
         }
+
+        _lastEnteredNumber = _displayNumber;
 
         return _displayNumber;
     }
@@ -33,8 +36,17 @@ internal sealed class Calculator : ICalculator
     {
         _storedNumber = 0;
         _displayNumber = 0;
+        _lastEnteredNumber = 0;
         _state = CalculatorState.WaitingForFirstNumber;
         _lastOperation = null;
+
+        return _displayNumber;
+    }
+
+    public int ClearScreen()
+    {
+        _displayNumber = 0;
+        _lastEnteredNumber = 0;
 
         return _displayNumber;
     }
@@ -52,7 +64,7 @@ internal sealed class Calculator : ICalculator
         else if (_state == CalculatorState.WaitingForSecondNumber)
         {
             _state = CalculatorState.ShowingResult;
-            _storedNumber = ExecuteInternal(operation);
+            _storedNumber = ExecuteInternal(operation, _displayNumber);
             _displayNumber = _storedNumber;
         }
         else if (_state == CalculatorState.ShowingResult)
@@ -69,23 +81,12 @@ internal sealed class Calculator : ICalculator
         switch (_state)
         {
             case CalculatorState.WaitingForFirstNumber:
-                {
-                    _storedNumber = _displayNumber;
-                    _state = CalculatorState.ShowingResult;
-                }
                 break;
             case CalculatorState.ShowingResult:
             case CalculatorState.WaitingForSecondNumber:
                 {
-                    if (_lastOperation is not null)
-                    {
-                        _storedNumber = ExecuteInternal(_lastOperation.Value);
-                        _displayNumber = _storedNumber;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException();
-                    }
+                    _storedNumber = ExecuteInternal(_lastOperation!.Value, _lastEnteredNumber);
+                    _displayNumber = _storedNumber;
                     _state = CalculatorState.ShowingResult;
                 }
                 break;
@@ -94,32 +95,32 @@ internal sealed class Calculator : ICalculator
         return _displayNumber;
     }
 
-    private int ExecuteInternal(Operation operation)
+    private int ExecuteInternal(Operation operation, int value)
     {
         if (operation == Operation.Add)
         {
-            if (((_storedNumber + _displayNumber) & OverflowMask) > 0)
+            if (((_storedNumber + value) & OverflowMask) > 0)
             {
-                return _displayNumber;
+                return value;
             }
 
-            return _storedNumber + _displayNumber;
+            return _storedNumber + value;
         }
         else if (operation == Operation.Subtract)
         {
-            if (_storedNumber - _displayNumber < 0)
+            if (_storedNumber - value < 0)
             {
-                return _displayNumber;
+                throw new NotSupportedException("Negative results are not supported");
             }
 
-            return _storedNumber - _displayNumber;
+            return _storedNumber - value;
         }
 
         throw new InvalidOperationException();
     }
 
-    private bool IsMaxValue(int value)
+    private bool IsMaxBitsReached(int value)
     {
-        return (value & MaxValue) == MaxValue;
+        return (value & MaxBits) == MaxBits;
     }
 }

@@ -29,6 +29,12 @@ internal partial class MainWindowViewModel : ObservableObject, IMainWindowViewMo
     }
 
     [RelayCommand]
+    private void ClearScreen()
+    {
+        Text = ToBinary(_calculator.ClearScreen());
+    }
+
+    [RelayCommand]
     private void Clear()
     {
         Text = ToBinary(_calculator.Clear());
@@ -37,19 +43,35 @@ internal partial class MainWindowViewModel : ObservableObject, IMainWindowViewMo
     [RelayCommand]
     private void Add()
     {
-        Text = ToBinary(_calculator.Execute(Operation.Add));
+        Safe(() => Text = ToBinary(_calculator.Execute(Operation.Add)));
     }
 
     [RelayCommand]
     private void Subtract()
     {
-        Text = ToBinary(_calculator.Execute(Operation.Subtract));
+        Safe(() => Text = ToBinary(_calculator.Execute(Operation.Subtract)));
     }
 
     [RelayCommand]
     private void Equals()
     {
-        Text = ToBinary(_calculator.Equals());
+        Safe(() => Text = ToBinary(_calculator.Equals()));
+    }
+
+    private void Safe(Action action)
+    {
+        try
+        {
+            action();
+        }
+        catch (NotSupportedException)
+        {
+            Text = "Invalid number";
+        }
+        catch (InvalidOperationException)
+        {
+            Text = "Something terrible happened";
+        }
     }
 
     private string ToBinary(int value)

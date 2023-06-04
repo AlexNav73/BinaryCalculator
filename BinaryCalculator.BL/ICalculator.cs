@@ -6,6 +6,8 @@ public interface ICalculator
 
     int Clear();
 
+    int ClearScreen();
+
     int Execute(Operation operation);
 
     int Equals();
