@@ -48,6 +48,13 @@ internal sealed class Calculator : ICalculator
         _displayNumber = 0;
         _lastEnteredNumber = 0;
 
+        if (_state == CalculatorState.ShowingResult)
+        {
+            _storedNumber = 0;
+            _lastOperation = null;
+            _state = CalculatorState.WaitingForFirstNumber;
+        }
+
         return _displayNumber;
     }
 

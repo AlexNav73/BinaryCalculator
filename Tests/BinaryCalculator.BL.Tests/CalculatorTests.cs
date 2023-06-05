@@ -154,5 +154,28 @@ namespace BinaryCalculator.BL.Tests
 
             Assert.That(result, Is.EqualTo(6));
         }
+
+        [Test]
+        public void ClearScreenBeforeEnteringNumberAndPressingEqualsWhileShowingResultsTest()
+        {
+            ExecuteOperation(Operation.Add, 1, 2);
+            _calculator.ClearScreen();
+            EnterNumber(5);
+            var result = _calculator.Equals();
+
+            Assert.That(result, Is.EqualTo(5));
+        }
+
+        [Test]
+        public void ClearScreenBeforeExecutingOperationTest()
+        {
+            ExecuteOperation(Operation.Add, 1, 2);
+            _calculator.ClearScreen();
+            _calculator.Execute(Operation.Add);
+            EnterNumber(5);
+            var result = _calculator.Equals();
+
+            Assert.That(result, Is.EqualTo(5));
+        }
     }
 }
